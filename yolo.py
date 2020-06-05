@@ -86,7 +86,7 @@ class YOLO(object):
         #print(image_data.shape)
         image_data /= 255.
         image_data = np.expand_dims(image_data, 0)  # Add batch dimension.
-        
+
         out_boxes, out_scores, out_classes = self.sess.run(
             [self.boxes, self.scores, self.classes],
             feed_dict={
@@ -101,16 +101,16 @@ class YOLO(object):
                 continue
             box = out_boxes[i]
            # score = out_scores[i]  
-            x = int(box[1])  
-            y = int(box[0])  
+            x = int(box[1])
+            y = int(box[0])
             w = int(box[3]-box[1])
             h = int(box[2]-box[0])
-            if x < 0 :
-                w = w + x
+            if x < 0:
+                w += x
                 x = 0
-            if y < 0 :
-                h = h + y
-                y = 0 
+            if y < 0:
+                h += y
+                y = 0
             return_boxs.append([x,y,w,h])
 
         return return_boxs

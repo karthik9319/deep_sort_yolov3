@@ -193,7 +193,7 @@ def _main(args):
                 skip_layer = layers[0]  # only one layer to route
                 all_layers.append(skip_layer)
                 prev_layer = skip_layer
-        
+
         elif section.startswith('maxpool'):
             size = int(cfg_parser[section]['size'])
             stride = int(cfg_parser[section]['stride'])
@@ -203,14 +203,14 @@ def _main(args):
                     strides=(stride, stride),
                     padding='same')(prev_layer))
             prev_layer = all_layers[-1]        
-        
+
         elif section.startswith('shortcut'):
             index = int(cfg_parser[section]['from'])
             activation = cfg_parser[section]['activation']
             assert activation == 'linear', 'Only linear activation supported.'
             all_layers.append(Add()([all_layers[index], prev_layer]))
             prev_layer = all_layers[-1]
-        
+
         elif section.startswith('upsample'):
             stride = int(cfg_parser[section]['stride'])
             assert stride == 2, 'Only stride=2 supported.'
@@ -222,10 +222,7 @@ def _main(args):
             all_layers.append(None)
             prev_layer = all_layers[-1]
 
-        elif section.startswith('net'):
-            pass
-
-        else:
+        elif not section.startswith('net'):
             raise ValueError(
                 'Unsupported section header type: {}'.format(section))
 
